@@ -1,4 +1,4 @@
-import { seedMessages } from "@/app/db/db";
+import { seedMessages } from "@/app/db/messages/respository";
 
 export async function GET() {
   const response = await seedMessages();

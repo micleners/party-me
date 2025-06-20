@@ -1,4 +1,4 @@
-import { dropMessages } from '@/app/db/db';
+import { dropMessages } from "@/app/db/messages/respository";
 
 export async function GET() {
   const result = await dropMessages();

@@ -9,7 +9,7 @@ export type Message = {
 };
 
 export type MessageDto = {
-  id: number;
+  id: string;
   content: string;
   createdAt: Timestamp;
   userId: number;

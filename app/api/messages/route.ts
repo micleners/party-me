@@ -1,4 +1,4 @@
-import { getMessages } from "@/app/db/db";
+import { getMessages } from "@/app/db/messages/respository";
 
 export async function GET() {
   const messages = await getMessages();
