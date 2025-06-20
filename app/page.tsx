@@ -1,11 +1,7 @@
-import { Main } from '@/components/Main/Messages';
-import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
-import { Welcome } from '../components/Welcome/Welcome';
+import { Messages } from '@/components/Messages/Messages';
 
 export default function HomePage() {
   return (
-    <>
-      <Main />
-    </>
+      <Messages />
   );
 }

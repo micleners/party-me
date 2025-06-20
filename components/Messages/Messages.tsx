@@ -1,7 +1,7 @@
 import { Box, Title } from '@mantine/core';
 import { Message } from '@/types/message';
 
-export const Main = async () => {
+export const Messages = async () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
   const response = await fetch(`${baseUrl}/api/messages`);
   const messages: Message[] = await response.json();
