@@ -1,13 +1,11 @@
-import { Main } from '@/components/Main/Main';
+import { Main } from '@/components/Main/Messages';
 import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
 import { Welcome } from '../components/Welcome/Welcome';
 
 export default function HomePage() {
   return (
     <>
-      {/* <Welcome /> */}
       <Main />
-      {/* <ColorSchemeToggle /> */}
     </>
   );
 }
