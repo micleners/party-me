@@ -11,26 +11,19 @@ export const Messages = async ({ searchParams }: { searchParams: Promise<SearchP
 
   return (
     <Box m="auto" ta="center" mt={100}>
+      <Text size="xl" mb={20} c="blue.7">
+        Messages
+      </Text>
       {messages.map((message) => {
-        // const initials = message.authorName
-        //   ? message.authorName
-        //       .split(' ')
-        //       .map((n) => n[0])
-        //       .join('')
-        //   : 'ML';
-
-        const isActivePersona = persona_id === message.userId.toString();
-        console.log(
-          'isActivePersona:',
-          isActivePersona,
-          'persona_id:',
-          persona_id,
-          'userId:',
-          message.userId
-        );
-
+        const isActivePersona = (persona_id ?? '1') === message.userId.toString();
         return (
-          <Group key={message.id} mb={20} p={10} maw={500} style={{ justifyContent: isActivePersona ? 'flex-start' : 'flex-end' }}>
+          <Group
+            key={message.id}
+            mb={20}
+            p={10}
+            maw={500}
+            style={{ justifyContent: isActivePersona ? 'flex-start' : 'flex-end' }}
+          >
             {isActivePersona && (
               <Avatar color="blue" radius="xl" style={{ alignSelf: 'flex-end' }}>
                 ML
