@@ -1,6 +1,6 @@
 import { SearchParams } from 'next/dist/server/request/search-params';
 import { Avatar, Box, Group, Paper, Text } from '@mantine/core';
-import { Message } from '@/types/message';
+import { Message } from '@/types/Message';
 
 export const Messages = async ({ searchParams }: { searchParams: Promise<SearchParams> }) => {
   const { persona_id } = await searchParams;

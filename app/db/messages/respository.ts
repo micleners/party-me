@@ -1,6 +1,6 @@
 import { db } from '../db';
 import { collection, doc, getDocs, writeBatch } from 'firebase/firestore/lite';
-import { MessageDto } from '@/types/message';
+import { MessageDto } from '@/types/Message';
 import { generateMessages } from './seedData';
 
 const messagesCollection = collection(db, 'messages');
