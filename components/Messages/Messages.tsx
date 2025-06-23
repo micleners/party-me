@@ -6,7 +6,7 @@ import { Part } from '@/types/Part';
 export const Messages = async ({ searchParams }: { searchParams: Promise<SearchParams> }) => {
   const { persona_id } = await searchParams;
 
-  const baseUrl = process.env.VERCEL_URL || 'http://localhost:3000';
+  const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
 
   const partsResponse = await fetch(`${baseUrl}/api/parts`);
   const parts = await partsResponse.json();
