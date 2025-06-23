@@ -69,7 +69,6 @@ For the backend of my application, I utilized NextJS API routes and chose to use
    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
    NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
    NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your_measurement_id
-   NEXT_PUBLIC_BASE_URL=http://localhost:3000
    ```
 
 4. Start the development server:
