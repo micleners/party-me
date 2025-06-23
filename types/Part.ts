@@ -1,5 +1,4 @@
-
-export type User = {
+export type Part = {
   id: number;
   color: string;
   firstName: string;

@@ -1,4 +1,4 @@
-import { User } from '@/types/User';
+import { Part } from '@/types/Part';
 import { faker } from '@faker-js/faker';
 
 const defaultColors = [
@@ -18,7 +18,7 @@ const defaultColors = [
   'orange',
 ];
 
-export const generateUsers = (count: number): User[] => {
+export const generateParts = (count: number): Part[] => {
   return Array.from({ length: count }, (_, i) => {
     const firstName = faker.person.firstName();
     const lastName = faker.person.lastName();
@@ -34,5 +34,5 @@ export const generateUsers = (count: number): User[] => {
   });
 };
 
-export const users = generateUsers(10);
-export const usersJson = JSON.stringify(users, null, 2);
+export const parts = generateParts(10);
+export const partsJson = JSON.stringify(parts, null, 2);

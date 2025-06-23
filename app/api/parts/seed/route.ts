@@ -1,7 +1,7 @@
-import { seedUsers } from "@/app/db/users/repository";
+import { seedParts } from "@/app/db/parts/repository";
 
 export async function GET() {
-  const response = await seedUsers();
+  const response = await seedParts();
 
   if (response.error) {
     return new Response(JSON.stringify(response), {

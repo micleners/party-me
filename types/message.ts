@@ -5,12 +5,12 @@ export type Message = {
   content: string;
   createdAtDate: string;
   createdAtTime: string;
-  userId: number;
+  partId: number;
 };
 
 export type MessageDto = {
   id: string;
   content: string;
   createdAt: Timestamp;
-  userId: number;
+  partId: number;
 };
