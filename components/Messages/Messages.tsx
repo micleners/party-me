@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import { SearchParams } from 'next/dist/server/request/search-params';
 import { getVercelOidcToken } from '@vercel/functions/oidc';
 import { Avatar, Box, Group, Paper, Text } from '@mantine/core';
@@ -5,6 +6,7 @@ import { Message } from '@/types/Message';
 import { Part } from '@/types/Part';
 
 export const Messages = async ({ searchParams }: { searchParams: Promise<SearchParams> }) => {
+  const cookieStore = await cookies();
   const { persona_id } = await searchParams;
 
   const baseUrl = process.env.VERCEL_URL
@@ -18,9 +20,11 @@ export const Messages = async ({ searchParams }: { searchParams: Promise<SearchP
 
   console.log('Base URL:', baseUrl); // Debug log
   console.log('Token:', token); // Debug log
+  console.log('Cookie:', cookieStore.get('vercel.session.token')); // Debug log
+  console.log('Cookie:', cookieStore.toString()); // Debug log
 
   const partsResponse = await fetch(`${baseUrl}/api/parts`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${token}`, Cookie: cookieStore.toString() },
   });
   console.log('Parts response status:', partsResponse.status); // Debug log
 
@@ -34,7 +38,7 @@ export const Messages = async ({ searchParams }: { searchParams: Promise<SearchP
   const partsById: Record<string, Part> = Object.fromEntries(parts.map((p: Part) => [p.id, p]));
 
   const messagesResponse = await fetch(`${baseUrl}/api/messages`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${token}`, Cookie: cookieStore.toString() },
   });
   console.log('Messages response status:', messagesResponse.status); // Debug log
 
