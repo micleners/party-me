@@ -1,59 +1,40 @@
-import { cookies, headers } from 'next/headers';
 import { SearchParams } from 'next/dist/server/request/search-params';
-import { getVercelOidcToken } from '@vercel/functions/oidc';
 import { Avatar, Box, Group, Paper, Text } from '@mantine/core';
 import { Message } from '@/types/Message';
 import { Part } from '@/types/Part';
+import { GET as getPartsHandler } from '@/app/api/parts/route';
+import { GET as getMessagesHandler } from '@/app/api/messages/route';
 
 export const Messages = async ({ searchParams }: { searchParams: Promise<SearchParams> }) => {
-  const cookieStore = await cookies();
-  const headersList = await headers();
-  const cookie = headersList.get('cookie');
-  console.log('Cookie from headers:', cookie); // Debug log
-  console.log('Cookie from cookie store:', cookieStore.get('vercel.session.token')); // Debug log
-
   const { persona_id } = await searchParams;
 
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000';
+  let parts: Part[] = [];
+  let messages: Message[] = [];
 
-  let token: string | undefined = undefined;
   if (process.env.VERCEL_URL) {
-    token = await getVercelOidcToken();
+    // Use direct handler calls in Vercel environment
+    parts = await (await getPartsHandler()).json();
+    messages = await (await getMessagesHandler()).json();
+  } else {
+    // Use HTTP requests in local environment
+    const baseUrl = 'http://localhost:3000';
+
+    const partsResponse = await fetch(`${baseUrl}/api/parts`);
+    if (!partsResponse.ok) {
+      const errorText = await partsResponse.text();
+      throw new Error(`Parts API failed: ${partsResponse.status} - ${errorText}`);
+    }
+    parts = await partsResponse.json();
+
+    const messagesResponse = await fetch(`${baseUrl}/api/messages`);
+    if (!messagesResponse.ok) {
+      const errorText = await messagesResponse.text();
+      throw new Error(`Messages API failed: ${messagesResponse.status} - ${errorText}`);
+    }
+    messages = await messagesResponse.json();
   }
-
-  console.log('Base URL:', baseUrl); // Debug log
-  console.log('Token:', token); // Debug log
-  console.log('Cookie:', cookieStore.get('vercel.session.token')); // Debug log
-  console.log('Cookie:', cookieStore.toString()); // Debug log
-
-  const partsResponse = await fetch(`${baseUrl}/api/parts`, {
-    headers: { Authorization: `Bearer ${token}`, Cookie: cookieStore.toString() ?? cookie },
-  });
-  console.log('Parts response status:', partsResponse.status); // Debug log
-
-  if (!partsResponse.ok) {
-    const errorText = await partsResponse.text();
-    console.error('Parts API error:', errorText);
-    throw new Error(`Parts API failed: ${partsResponse.status}`);
-  }
-  const parts = await partsResponse.json();
 
   const partsById: Record<string, Part> = Object.fromEntries(parts.map((p: Part) => [p.id, p]));
-
-  const messagesResponse = await fetch(`${baseUrl}/api/messages`, {
-    headers: { Authorization: `Bearer ${token}`, Cookie: cookieStore.toString() ?? cookie },
-  });
-  console.log('Messages response status:', messagesResponse.status); // Debug log
-
-  if (!messagesResponse.ok) {
-    const errorText = await messagesResponse.text();
-    console.error('Messages API error:', errorText);
-    throw new Error(`Messages API failed: ${messagesResponse.status}`);
-  }
-
-  const messages: Message[] = await messagesResponse.json();
 
   return (
     <Box m="auto" ta="center">
