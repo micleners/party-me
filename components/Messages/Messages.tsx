@@ -1,4 +1,5 @@
 import { SearchParams } from 'next/dist/server/request/search-params';
+import { getVercelOidcToken } from '@vercel/functions/oidc';
 import { Avatar, Box, Group, Paper, Text } from '@mantine/core';
 import { Message } from '@/types/Message';
 import { Part } from '@/types/Part';
@@ -10,9 +11,16 @@ export const Messages = async ({ searchParams }: { searchParams: Promise<SearchP
     ? `https://${process.env.VERCEL_URL}`
     : 'http://localhost:3000';
 
+  let token: string | undefined = undefined;
+  if (process.env.VERCEL_URL) {
+    token = await getVercelOidcToken();
+  }
+
   console.log('Base URL:', baseUrl); // Debug log
 
-  const partsResponse = await fetch(`${baseUrl}/api/parts`);
+  const partsResponse = await fetch(`${baseUrl}/api/parts`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   console.log('Parts response status:', partsResponse.status); // Debug log
 
   if (!partsResponse.ok) {
@@ -24,7 +32,9 @@ export const Messages = async ({ searchParams }: { searchParams: Promise<SearchP
 
   const partsById: Record<string, Part> = Object.fromEntries(parts.map((p: Part) => [p.id, p]));
 
-  const messagesResponse = await fetch(`${baseUrl}/api/messages`);
+  const messagesResponse = await fetch(`${baseUrl}/api/messages`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   console.log('Messages response status:', messagesResponse.status); // Debug log
 
   if (!messagesResponse.ok) {
