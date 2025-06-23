@@ -17,6 +17,7 @@ export const Messages = async ({ searchParams }: { searchParams: Promise<SearchP
   }
 
   console.log('Base URL:', baseUrl); // Debug log
+  console.log('Token:', token); // Debug log
 
   const partsResponse = await fetch(`${baseUrl}/api/parts`, {
     headers: { Authorization: `Bearer ${token}` },
