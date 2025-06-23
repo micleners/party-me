@@ -6,14 +6,33 @@ import { Part } from '@/types/Part';
 export const Messages = async ({ searchParams }: { searchParams: Promise<SearchParams> }) => {
   const { persona_id } = await searchParams;
 
-  const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000';
+
+  console.log('Base URL:', baseUrl); // Debug log
 
   const partsResponse = await fetch(`${baseUrl}/api/parts`);
+  console.log('Parts response status:', partsResponse.status); // Debug log
+
+  if (!partsResponse.ok) {
+    const errorText = await partsResponse.text();
+    console.error('Parts API error:', errorText);
+    throw new Error(`Parts API failed: ${partsResponse.status}`);
+  }
   const parts = await partsResponse.json();
 
   const partsById: Record<string, Part> = Object.fromEntries(parts.map((p: Part) => [p.id, p]));
 
   const messagesResponse = await fetch(`${baseUrl}/api/messages`);
+  console.log('Messages response status:', messagesResponse.status); // Debug log
+
+  if (!messagesResponse.ok) {
+    const errorText = await messagesResponse.text();
+    console.error('Messages API error:', errorText);
+    throw new Error(`Messages API failed: ${messagesResponse.status}`);
+  }
+
   const messages: Message[] = await messagesResponse.json();
 
   return (
